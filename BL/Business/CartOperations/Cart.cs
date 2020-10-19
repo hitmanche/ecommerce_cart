@@ -26,7 +26,8 @@ namespace BL.Business.CartOperations
                 case CartLogic.Redis:
                     cart = new CartRedis();
                     break;
-                case CartLogic.MemoryCache:
+                case CartLogic.Mongodb:
+                    cart = new CartMongo();
                     break;
             }
         }
@@ -48,37 +49,46 @@ namespace BL.Business.CartOperations
             return cartData;
         }
 
-        public async Task<object> AddCart(int prmId)
+        public async Task<object> AddCart(int prmId, int prmQuantity)
         {
             List<ProductCart> cartData = await GetCart() as List<ProductCart>;
             ProductCart prmFind = cartData.Where(x => x.id == prmId).FirstOrDefault();
             product product = await _dbContext.Repository<product>().First(x => x.id == prmId);
             stock stock = await _dbContext.Repository<stock>().First(x => x.product == prmId);
+            int quantity = prmQuantity < 1 ? 1 : prmQuantity;
             if (prmFind != null)
             {
-                prmFind.quantity += 1;
+                prmFind.quantity += quantity;
                 prmFind.totalAmount = prmFind.amount * prmFind.quantity;
             }
             else
             {
-                cartData.Add(new ProductCart { id = prmId, quantity = 1, name = product.name, amount = stock.price, totalAmount = stock.price });
+                cartData.Add(new ProductCart { id = prmId, quantity = quantity, name = product.name, amount = stock.price, totalAmount = stock.price * quantity });
             }
             cart.AddCart(_prmUserAgent, JsonConvert.SerializeObject(cartData));
             return cartData;
         }
 
-        public async Task<object> RemoveCart(int prmId)
+        public async Task<object> RemoveCart(int prmId, int prmQuantity)
         {
             List<ProductCart> cartData = await GetCart() as List<ProductCart>;
             ProductCart prmFind = cartData.Where(x => x.id == prmId).FirstOrDefault();
-            if (prmFind==null)
+            if (prmFind == null)
             {
                 cart.AddCart(_prmUserAgent, JsonConvert.SerializeObject(new List<ProductCart>()));
                 return new List<ProductCart>();
             }
             else
             {
-                cartData.Remove(prmFind);
+                if (prmQuantity < 1 || prmFind.quantity - prmQuantity < 1)
+                {
+                    cartData.Remove(prmFind);
+                }
+                else
+                {
+                    prmFind.quantity -= prmQuantity;
+                    prmFind.totalAmount = prmFind.amount * prmFind.quantity;
+                }
                 cart.AddCart(_prmUserAgent, JsonConvert.SerializeObject(cartData));
                 return cartData;
             }

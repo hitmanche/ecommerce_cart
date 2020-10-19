@@ -24,7 +24,7 @@ namespace ecommerce_cart.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Add(int id)
+        public async Task<ActionResult> Add(int id,int quantity)
         {
             var prmResult = await new StockControl().GeneralControl(id);
             if (!prmResult.prmControl)
@@ -33,7 +33,7 @@ namespace ecommerce_cart.Controllers
             }
             else
             {
-                var returnData=await _cart.AddCart(id);
+                var returnData=await _cart.AddCart(id,quantity);
                 return Ok(returnData);
             }
         }
@@ -45,9 +45,9 @@ namespace ecommerce_cart.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Remove(int id)
+        public async Task<ActionResult> Remove(int id,int quantity)
         {
-            return Ok(await _cart.RemoveCart(id));
+            return Ok(await _cart.RemoveCart(id, quantity));
         }
     }
 }
