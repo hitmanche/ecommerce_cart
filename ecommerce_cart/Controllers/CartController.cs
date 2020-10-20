@@ -26,7 +26,7 @@ namespace ecommerce_cart.Controllers
         [HttpGet]
         public async Task<ActionResult> Add(int id,int quantity)
         {
-            var prmResult = await new StockControl().GeneralControl(id);
+            var prmResult = await new StockControl().GeneralControl(id,quantity);
             if (!prmResult.prmControl)
             {
                 return BadRequest(_lang.GetErrorString(prmResult.prmData));

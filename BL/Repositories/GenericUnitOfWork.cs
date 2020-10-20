@@ -30,7 +30,7 @@ namespace BL.Repositories
 				return repositories[typeof(TEntity)] as IRepository<TEntity>;
 			}
 
-			IRepository<TEntity> repository = new GenericRepository<TEntity>();
+			IRepository<TEntity> repository = new GenericRepository<TEntity>(_context);
 			repositories.Add(typeof(TEntity), repository);
 			return repository;
 		}

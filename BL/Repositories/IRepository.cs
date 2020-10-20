@@ -11,5 +11,6 @@ namespace BL.Repositories
         Task<List<TEntity>> GetAll();
         Task<List<TEntity>> Where(Expression<Func<TEntity, bool>> predicate);
         Task<TEntity> First(Expression<Func<TEntity, bool>> predicate);
+        Task<TEntity> Update(TEntity entity, params object[] keyValues);
     }
 }

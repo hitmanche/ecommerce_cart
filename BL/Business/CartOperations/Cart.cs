@@ -1,4 +1,5 @@
 ﻿using BL.Business.Cart;
+using BL.Business.ControlOperations;
 using BL.Business.Global;
 using BL.Repositories;
 using CL;
@@ -65,6 +66,7 @@ namespace BL.Business.CartOperations
             {
                 cartData.Add(new ProductCart { id = prmId, quantity = quantity, name = product.name, amount = stock.price, totalAmount = stock.price * quantity });
             }
+            new StockQuantity().ReservedQuantityAdd(prmId, quantity);
             cart.AddCart(_prmUserAgent, JsonConvert.SerializeObject(cartData));
             return cartData;
         }
@@ -89,6 +91,7 @@ namespace BL.Business.CartOperations
                     prmFind.quantity -= prmQuantity;
                     prmFind.totalAmount = prmFind.amount * prmFind.quantity;
                 }
+                new StockQuantity().ReservedQuantityRemove(prmId, prmQuantity);
                 cart.AddCart(_prmUserAgent, JsonConvert.SerializeObject(cartData));
                 return cartData;
             }

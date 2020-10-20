@@ -46,7 +46,13 @@ namespace Localization
                     { "EN_1007", "This product is currently unavailable." },
                     { "TR_1007", "Bu ürün şu anda kullanım dışı." },
                     { "EN_1008", "The stock for the product has expired." },
-                    { "TR_1008", "Ürüne ait stoğun kullanılabilir tarihi geçmiş." }
+                    { "TR_1008", "Ürüne ait stoğun kullanılabilir tarihi geçmiş." },
+                    { "EN_1009", "You cannot add more to the basket than the existing stock." },
+                    { "TR_1009", "Varolan stoktan fazla miktarda sepete ekleyemezsiniz." },
+                    { "EN_1010", "The product is not available for sale." },
+                    { "TR_1010", "Ürün satışa kapalı." },
+                    { "EN_1011", "The inventory of the product could not be added to the stock because it was reserved." },
+                    { "TR_1011", "Ürüne ait stoklar rezerve edildiği için stoğa eklenemedi." }
                 };
             }
         }
